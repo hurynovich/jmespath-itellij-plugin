@@ -29,13 +29,22 @@ object JMESPathTokenTypes {
     val OPERATOR = JMESPathTokenType("JMESPATH_OPERATOR")
 
     @JvmField
-    val PARENTHESES = JMESPathTokenType("JMESPATH_PARENTHESES")
+    val LPAREN = JMESPathTokenType("JMESPATH_LPAREN")
 
     @JvmField
-    val BRACKETS = JMESPathTokenType("JMESPATH_BRACKETS")
+    val RPAREN = JMESPathTokenType("JMESPATH_RPAREN")
 
     @JvmField
-    val BRACES = JMESPathTokenType("JMESPATH_BRACES")
+    val LBRACKET = JMESPathTokenType("JMESPATH_LBRACKET")
+
+    @JvmField
+    val RBRACKET = JMESPathTokenType("JMESPATH_RBRACKET")
+
+    @JvmField
+    val LBRACE = JMESPathTokenType("JMESPATH_LBRACE")
+
+    @JvmField
+    val RBRACE = JMESPathTokenType("JMESPATH_RBRACE")
 
     @JvmField
     val COMMA = JMESPathTokenType("JMESPATH_COMMA")
@@ -97,16 +106,19 @@ object JMESPathTokenTypes {
             JmesPathLexer.T__7,  // '*'
             JmesPathLexer.T__16  // '&'
                 -> OPERATOR
-            JmesPathLexer.T__4,  // '('
+            JmesPathLexer.T__4   // '('
+                -> LPAREN
             JmesPathLexer.T__5   // ')'
-                -> PARENTHESES
+                -> RPAREN
             JmesPathLexer.T__8,  // '['
-            JmesPathLexer.T__10, // ']'
             JmesPathLexer.T__14  // '[?'
-                -> BRACKETS
-            JmesPathLexer.T__11, // '{'
+                -> LBRACKET
+            JmesPathLexer.T__10  // ']'
+                -> RBRACKET
+            JmesPathLexer.T__11  // '{'
+                -> LBRACE
             JmesPathLexer.T__12  // '}'
-                -> BRACES
+                -> RBRACE
             JmesPathLexer.T__9   // ','
                 -> COMMA
             JmesPathLexer.T__13  // ':'

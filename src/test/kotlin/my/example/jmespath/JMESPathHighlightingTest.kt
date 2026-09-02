@@ -1,5 +1,6 @@
 package my.example.jmespath
 
+import com.intellij.lang.LanguageBraceMatching
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.fileTypes.FileTypeManager
@@ -25,7 +26,7 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals("join", lexer.tokenText)
         lexer.advance()
 
-        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(JMESPathTokenTypes.LPAREN, lexer.tokenType)
         assertEquals("(", lexer.tokenText)
         lexer.advance()
 
@@ -44,7 +45,7 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals("tags", lexer.tokenText)
         lexer.advance()
 
-        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(JMESPathTokenTypes.RPAREN, lexer.tokenType)
         assertEquals(")", lexer.tokenText)
         lexer.advance()
 
@@ -55,7 +56,7 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals("sort_by", lexer.tokenText)
         lexer.advance()
 
-        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(JMESPathTokenTypes.LPAREN, lexer.tokenType)
         assertEquals("(", lexer.tokenText)
         lexer.advance()
 
@@ -78,7 +79,7 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals("name", lexer.tokenText)
         lexer.advance()
 
-        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(JMESPathTokenTypes.RPAREN, lexer.tokenType)
         assertEquals(")", lexer.tokenText)
         lexer.advance()
 
@@ -89,11 +90,11 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals("custom_func", lexer.tokenText)
         lexer.advance()
 
-        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(JMESPathTokenTypes.LPAREN, lexer.tokenType)
         assertEquals("(", lexer.tokenText)
         lexer.advance()
 
-        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(JMESPathTokenTypes.RPAREN, lexer.tokenType)
         assertEquals(")", lexer.tokenText)
         lexer.advance()
 
@@ -203,7 +204,7 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
         lexer.advance()
 
-        assertEquals(JMESPathTokenTypes.BRACKETS, lexer.tokenType)
+        assertEquals(JMESPathTokenTypes.LBRACKET, lexer.tokenType)
         assertEquals("[?", lexer.tokenText)
         lexer.advance()
 
@@ -290,6 +291,121 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         val numberHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.NUMBER)
         assertEquals(1, numberHighlights.size)
         assertEquals(JMESPathSyntaxHighlighter.NUMBER, numberHighlights[0])
+
+        val lparenHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.LPAREN)
+        assertEquals(1, lparenHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.PARENTHESES, lparenHighlights[0])
+
+        val rparenHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.RPAREN)
+        assertEquals(1, rparenHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.PARENTHESES, rparenHighlights[0])
+
+        val lbracketHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.LBRACKET)
+        assertEquals(1, lbracketHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.BRACKETS, lbracketHighlights[0])
+
+        val rbracketHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.RBRACKET)
+        assertEquals(1, rbracketHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.BRACKETS, rbracketHighlights[0])
+
+        val lbraceHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.LBRACE)
+        assertEquals(1, lbraceHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.BRACES, lbraceHighlights[0])
+
+        val rbraceHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.RBRACE)
+        assertEquals(1, rbraceHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.BRACES, rbraceHighlights[0])
+    }
+
+    fun testPairedBracketsAndBracesTokens() {
+        val lexer = JMESPathLexer()
+        lexer.start("{ a: [ ( 1 ) ] }")
+
+        assertEquals(JMESPathTokenTypes.LBRACE, lexer.tokenType)
+        assertEquals("{", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, lexer.tokenType)
+        assertEquals("a", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.COLON, lexer.tokenType)
+        assertEquals(":", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.LBRACKET, lexer.tokenType)
+        assertEquals("[", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.LPAREN, lexer.tokenType)
+        assertEquals("(", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.NUMBER, lexer.tokenType)
+        assertEquals("1", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.RPAREN, lexer.tokenType)
+        assertEquals(")", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.RBRACKET, lexer.tokenType)
+        assertEquals("]", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.RBRACE, lexer.tokenType)
+        assertEquals("}", lexer.tokenText)
+        lexer.advance()
+
+        assertNull(lexer.tokenType)
+    }
+
+    fun testPairedBraceMatcherDefinition() {
+        val matcher = JMESPathPairedBraceMatcher()
+        val pairs = matcher.pairs
+        assertEquals(3, pairs.size)
+
+        val parenPair = pairs.first { it.leftBraceType == JMESPathTokenTypes.LPAREN }
+        assertEquals(JMESPathTokenTypes.RPAREN, parenPair.rightBraceType)
+        assertFalse(parenPair.isStructural)
+
+        val bracketPair = pairs.first { it.leftBraceType == JMESPathTokenTypes.LBRACKET }
+        assertEquals(JMESPathTokenTypes.RBRACKET, bracketPair.rightBraceType)
+        assertFalse(bracketPair.isStructural)
+
+        val bracePair = pairs.first { it.leftBraceType == JMESPathTokenTypes.LBRACE }
+        assertEquals(JMESPathTokenTypes.RBRACE, bracePair.rightBraceType)
+        assertTrue(bracePair.isStructural)
+
+        assertTrue(matcher.isPairedBracesAllowedBeforeType(JMESPathTokenTypes.LBRACE, null))
+        assertEquals(42, matcher.getCodeConstructStart(null, 42))
+    }
+
+    fun testPairedBraceMatcherRegisteredInLanguage() {
+        val matcher = LanguageBraceMatching.INSTANCE.forLanguage(JMESPathLanguage.INSTANCE)
+        assertNotNull(matcher)
+        assertTrue(matcher is JMESPathPairedBraceMatcher)
     }
 
     fun testColorSettingsPage() {

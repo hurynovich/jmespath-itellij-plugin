@@ -44,6 +44,10 @@
                 language="JMESPath"
                 implementationClass="my.example.jmespath.JMESPathParserDefinition"/>
 
+        <lang.braceMatcher
+                language="JMESPath"
+                implementationClass="my.example.jmespath.JMESPathPairedBraceMatcher"/>
+
         <colorSettingsPage
                 implementation="my.example.jmespath.JMESPathColorSettingsPage"/>
     </extensions>

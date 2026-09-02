@@ -95,9 +95,9 @@ class JMESPathSyntaxHighlighter : SyntaxHighlighterBase() {
             JMESPathTokenTypes.NUMBER -> NUMBER_KEYS
             JMESPathTokenTypes.OPERATOR -> OPERATOR_KEYS
             JMESPathTokenTypes.COMPARATOR -> COMPARATOR_KEYS
-            JMESPathTokenTypes.PARENTHESES -> PARENTHESES_KEYS
-            JMESPathTokenTypes.BRACKETS -> BRACKETS_KEYS
-            JMESPathTokenTypes.BRACES -> BRACES_KEYS
+            JMESPathTokenTypes.LPAREN, JMESPathTokenTypes.RPAREN -> PARENTHESES_KEYS
+            JMESPathTokenTypes.LBRACKET, JMESPathTokenTypes.RBRACKET -> BRACKETS_KEYS
+            JMESPathTokenTypes.LBRACE, JMESPathTokenTypes.RBRACE -> BRACES_KEYS
             JMESPathTokenTypes.COMMA -> COMMA_KEYS
             JMESPathTokenTypes.COLON -> COLON_KEYS
             JMESPathTokenTypes.BAD_CHARACTER -> BAD_CHAR_KEYS
