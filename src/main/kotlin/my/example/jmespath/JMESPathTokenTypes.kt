@@ -11,6 +11,9 @@ object JMESPathTokenTypes {
     val CURRENT_NODE = JMESPathTokenType("JMESPATH_CURRENT_NODE")
 
     @JvmField
+    val FUNCTION = JMESPathTokenType("JMESPATH_FUNCTION")
+
+    @JvmField
     val IDENTIFIER = JMESPathTokenType("JMESPATH_IDENTIFIER")
 
     @JvmField
@@ -48,6 +51,35 @@ object JMESPathTokenTypes {
 
     @JvmField
     val BAD_CHARACTER: IElementType = TokenType.BAD_CHARACTER
+
+    val BUILTIN_FUNCTIONS: Set<String> = setOf(
+        "abs",
+        "avg",
+        "ceil",
+        "contains",
+        "ends_with",
+        "floor",
+        "join",
+        "keys",
+        "length",
+        "map",
+        "max",
+        "max_by",
+        "merge",
+        "min",
+        "min_by",
+        "not_null",
+        "reverse",
+        "sort",
+        "sort_by",
+        "starts_with",
+        "sum",
+        "to_array",
+        "to_number",
+        "to_string",
+        "type",
+        "values"
+    )
 
     fun getIElementType(antlrTokenType: Int): IElementType {
         return when (antlrTokenType) {

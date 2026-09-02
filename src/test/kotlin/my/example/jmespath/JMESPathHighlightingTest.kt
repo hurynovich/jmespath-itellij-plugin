@@ -15,6 +15,89 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals(JMESPathFileType.INSTANCE, jpType)
     }
 
+    fun testFunctionTokens() {
+        val lexer = JMESPathLexer()
+        lexer.start("join(', ', tags) sort_by(@, &name) custom_func()")
+
+        assertEquals(JMESPathTokenTypes.FUNCTION, lexer.tokenType)
+        assertEquals("join", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals("(", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.STRING, lexer.tokenType)
+        assertEquals("', '", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.COMMA, lexer.tokenType)
+        assertEquals(",", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, lexer.tokenType)
+        assertEquals("tags", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(")", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.FUNCTION, lexer.tokenType)
+        assertEquals("sort_by", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals("(", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.CURRENT_NODE, lexer.tokenType)
+        assertEquals("@", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.COMMA, lexer.tokenType)
+        assertEquals(",", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.OPERATOR, lexer.tokenType)
+        assertEquals("&", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, lexer.tokenType)
+        assertEquals("name", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(")", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.FUNCTION, lexer.tokenType)
+        assertEquals("custom_func", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals("(", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.PARENTHESES, lexer.tokenType)
+        assertEquals(")", lexer.tokenText)
+        lexer.advance()
+
+        assertNull(lexer.tokenType)
+    }
+
     fun testKeywordTokens() {
         val lexer = JMESPathLexer()
         lexer.start("true false null")
@@ -184,6 +267,11 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals(JMESPathSyntaxHighlighter.CURRENT_NODE, currentNodeHighlights[0])
         assertEquals(DefaultLanguageHighlighterColors.KEYWORD, JMESPathSyntaxHighlighter.CURRENT_NODE.fallbackAttributeKey)
 
+        val functionHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.FUNCTION)
+        assertEquals(1, functionHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.FUNCTION, functionHighlights[0])
+        assertEquals(DefaultLanguageHighlighterColors.FUNCTION_CALL, JMESPathSyntaxHighlighter.FUNCTION.fallbackAttributeKey)
+
         val badCharHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.BAD_CHARACTER)
         assertEquals(1, badCharHighlights.size)
         assertEquals(JMESPathSyntaxHighlighter.BAD_CHARACTER, badCharHighlights[0])
@@ -207,6 +295,7 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertNotNull(page.displayName)
         assertNotNull(page.icon)
         assertTrue(page.attributeDescriptors.isNotEmpty())
+        assertTrue(page.attributeDescriptors.any { it.key == JMESPathSyntaxHighlighter.FUNCTION })
         assertTrue(page.demoText.contains("true"))
         assertTrue(page.demoText.contains("false"))
         assertTrue(page.demoText.contains("null"))
@@ -216,5 +305,28 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         val psiFile = myFixture.configureByText("example.jp", "locations[?state == 'WA'].name | sort(@)")
         assertTrue(psiFile is JMESPathFile)
         assertEquals(JMESPathFileType.INSTANCE, psiFile.fileType)
+    }
+
+    fun testSampleFileTokens() {
+        val lexer = JMESPathLexer()
+        lexer.start("sortedNames: sort_by(projects, &name)[*].name, joinedTags: join(', ', tags)")
+        val tokenTypes = mutableListOf<com.intellij.psi.tree.IElementType>()
+        val tokenTexts = mutableListOf<String>()
+        while (lexer.tokenType != null) {
+            tokenTypes.add(lexer.tokenType!!)
+            tokenTexts.add(lexer.tokenText)
+            lexer.advance()
+        }
+        assertTrue(tokenTexts.contains("sort_by"))
+        val sortByIdx = tokenTexts.indexOf("sort_by")
+        assertEquals(JMESPathTokenTypes.FUNCTION, tokenTypes[sortByIdx])
+
+        assertTrue(tokenTexts.contains("join"))
+        val joinIdx = tokenTexts.indexOf("join")
+        assertEquals(JMESPathTokenTypes.FUNCTION, tokenTypes[joinIdx])
+
+        assertTrue(tokenTexts.contains("projects"))
+        val projectsIdx = tokenTexts.indexOf("projects")
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, tokenTypes[projectsIdx])
     }
 }

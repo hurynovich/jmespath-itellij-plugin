@@ -86,8 +86,15 @@ class JMESPathLexer : LexerBase() {
         tokenStart = tokenStartInDoc
         tokenEnd = tokenEndInDoc
         currentPosition = tokenEndInDoc
-        currentTokenType = JMESPathTokenTypes.getIElementType(token.type)
-        pendingToken = antlrLexer?.nextToken()
+        val nextToken = antlrLexer?.nextToken()
+        if (token.type == JmesPathLexer.NAME &&
+            (nextToken?.type == JmesPathLexer.T__4 || JMESPathTokenTypes.BUILTIN_FUNCTIONS.contains(token.text))
+        ) {
+            currentTokenType = JMESPathTokenTypes.FUNCTION
+        } else {
+            currentTokenType = JMESPathTokenTypes.getIElementType(token.type)
+        }
+        pendingToken = nextToken
     }
 
     override fun getBufferSequence(): CharSequence = buffer
