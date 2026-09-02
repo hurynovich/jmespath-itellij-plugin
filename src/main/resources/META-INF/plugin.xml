@@ -50,6 +50,16 @@
 
         <colorSettingsPage
                 implementation="my.example.jmespath.JMESPathColorSettingsPage"/>
+
+        <lang.formatter
+                language="JMESPath"
+                implementationClass="my.example.jmespath.formatting.JMESPathFormattingModelBuilder"/>
+
+        <codeStyleSettingsProvider
+                implementation="my.example.jmespath.formatting.JMESPathCodeStyleSettingsProvider"/>
+
+        <langCodeStyleSettingsProvider
+                implementation="my.example.jmespath.formatting.JMESPathLanguageCodeStyleSettingsProvider"/>
     </extensions>
 
 </idea-plugin>
