@@ -65,6 +65,112 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertNull(lexer.tokenType)
     }
 
+    fun testStringsNumbersComparatorsAndOperators() {
+        val lexer = JMESPathLexer()
+        lexer.start(""""foo" 'bar' 123 45.67 == != < [? @ | *""")
+
+        assertEquals(JMESPathTokenTypes.STRING, lexer.tokenType)
+        assertEquals("\"foo\"", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.STRING, lexer.tokenType)
+        assertEquals("'bar'", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.NUMBER, lexer.tokenType)
+        assertEquals("123", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.NUMBER, lexer.tokenType)
+        assertEquals("45.67", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.COMPARATOR, lexer.tokenType)
+        assertEquals("==", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.COMPARATOR, lexer.tokenType)
+        assertEquals("!=", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.COMPARATOR, lexer.tokenType)
+        assertEquals("<", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.BRACKETS, lexer.tokenType)
+        assertEquals("[?", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.OPERATOR, lexer.tokenType)
+        assertEquals("@", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.OPERATOR, lexer.tokenType)
+        assertEquals("|", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.OPERATOR, lexer.tokenType)
+        assertEquals("*", lexer.tokenText)
+        lexer.advance()
+
+        assertNull(lexer.tokenType)
+    }
+
+    fun testBadCharacterToken() {
+        val lexer = JMESPathLexer()
+        lexer.start("foo # bar")
+
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, lexer.tokenType)
+        assertEquals("foo", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.BAD_CHARACTER, lexer.tokenType)
+        assertEquals("#", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, lexer.tokenType)
+        assertEquals("bar", lexer.tokenText)
+        lexer.advance()
+
+        assertNull(lexer.tokenType)
+    }
+
     fun testSyntaxHighlighterAttributes() {
         val highlighter = JMESPathSyntaxHighlighter()
 
@@ -79,7 +185,16 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals(HighlighterColors.BAD_CHARACTER, JMESPathSyntaxHighlighter.BAD_CHARACTER.fallbackAttributeKey)
 
         val identifierHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.IDENTIFIER)
-        assertEquals(0, identifierHighlights.size)
+        assertEquals(1, identifierHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.IDENTIFIER, identifierHighlights[0])
+
+        val stringHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.STRING)
+        assertEquals(1, stringHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.STRING, stringHighlights[0])
+
+        val numberHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.NUMBER)
+        assertEquals(1, numberHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.NUMBER, numberHighlights[0])
     }
 
     fun testColorSettingsPage() {
@@ -90,5 +205,11 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertTrue(page.demoText.contains("true"))
         assertTrue(page.demoText.contains("false"))
         assertTrue(page.demoText.contains("null"))
+    }
+
+    fun testPsiFileParsing() {
+        val psiFile = myFixture.configureByText("example.jp", "locations[?state == 'WA'].name | sort(@)")
+        assertTrue(psiFile is JMESPathFile)
+        assertEquals(JMESPathFileType.INSTANCE, psiFile.fileType)
     }
 }

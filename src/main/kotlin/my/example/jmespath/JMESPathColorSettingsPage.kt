@@ -15,6 +15,46 @@ class JMESPathColorSettingsPage : ColorSettingsPage {
             JMESPathSyntaxHighlighter.KEYWORD
         ),
         AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.identifier"),
+            JMESPathSyntaxHighlighter.IDENTIFIER
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.string"),
+            JMESPathSyntaxHighlighter.STRING
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.number"),
+            JMESPathSyntaxHighlighter.NUMBER
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.operator"),
+            JMESPathSyntaxHighlighter.OPERATOR
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.comparator"),
+            JMESPathSyntaxHighlighter.COMPARATOR
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.parentheses"),
+            JMESPathSyntaxHighlighter.PARENTHESES
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.brackets"),
+            JMESPathSyntaxHighlighter.BRACKETS
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.braces"),
+            JMESPathSyntaxHighlighter.BRACES
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.comma"),
+            JMESPathSyntaxHighlighter.COMMA
+        ),
+        AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.colon"),
+            JMESPathSyntaxHighlighter.COLON
+        ),
+        AttributesDescriptor(
             MyMessageBundle.message("jmespath.colors.bad_character"),
             JMESPathSyntaxHighlighter.BAD_CHARACTER
         )
@@ -27,10 +67,11 @@ class JMESPathColorSettingsPage : ColorSettingsPage {
     override fun getDemoText(): String {
         return """
             locations[?state == 'WA'].name | sort(@) | {
-                first: [0],
-                active: true,
-                disabled: false,
-                emptyValue: null
+                "first": [0],
+                "active": true,
+                "disabled": false,
+                "emptyValue": null,
+                "count": 42
             }
         """.trimIndent()
     }

@@ -1,6 +1,7 @@
 package my.example.jmespath
 
 import com.intellij.psi.TokenType
+import com.intellij.psi.tree.IElementType
 
 object JMESPathTokenTypes {
     @JvmField
@@ -10,8 +11,75 @@ object JMESPathTokenTypes {
     val IDENTIFIER = JMESPathTokenType("JMESPATH_IDENTIFIER")
 
     @JvmField
-    val WHITE_SPACE = TokenType.WHITE_SPACE
+    val STRING = JMESPathTokenType("JMESPATH_STRING")
 
     @JvmField
-    val BAD_CHARACTER = TokenType.BAD_CHARACTER
+    val NUMBER = JMESPathTokenType("JMESPATH_NUMBER")
+
+    @JvmField
+    val COMPARATOR = JMESPathTokenType("JMESPATH_COMPARATOR")
+
+    @JvmField
+    val OPERATOR = JMESPathTokenType("JMESPATH_OPERATOR")
+
+    @JvmField
+    val PARENTHESES = JMESPathTokenType("JMESPATH_PARENTHESES")
+
+    @JvmField
+    val BRACKETS = JMESPathTokenType("JMESPATH_BRACKETS")
+
+    @JvmField
+    val BRACES = JMESPathTokenType("JMESPATH_BRACES")
+
+    @JvmField
+    val COMMA = JMESPathTokenType("JMESPATH_COMMA")
+
+    @JvmField
+    val COLON = JMESPathTokenType("JMESPATH_COLON")
+
+    @JvmField
+    val LITERAL_TICK = JMESPathTokenType("JMESPATH_LITERAL_TICK")
+
+    @JvmField
+    val WHITE_SPACE: IElementType = TokenType.WHITE_SPACE
+
+    @JvmField
+    val BAD_CHARACTER: IElementType = TokenType.BAD_CHARACTER
+
+    fun getIElementType(antlrTokenType: Int): IElementType {
+        return when (antlrTokenType) {
+            JmesPathLexer.JSON_CONSTANT -> KEYWORD
+            JmesPathLexer.NAME -> IDENTIFIER
+            JmesPathLexer.STRING, JmesPathLexer.RAW_STRING -> STRING
+            JmesPathLexer.REAL_OR_EXPONENT_NUMBER, JmesPathLexer.SIGNED_INT -> NUMBER
+            JmesPathLexer.COMPARATOR -> COMPARATOR
+            JmesPathLexer.T__0,  // '.'
+            JmesPathLexer.T__1,  // '!'
+            JmesPathLexer.T__2,  // '&&'
+            JmesPathLexer.T__3,  // '||'
+            JmesPathLexer.T__6,  // '|'
+            JmesPathLexer.T__7,  // '*'
+            JmesPathLexer.T__15, // '@'
+            JmesPathLexer.T__16  // '&'
+                -> OPERATOR
+            JmesPathLexer.T__4,  // '('
+            JmesPathLexer.T__5   // ')'
+                -> PARENTHESES
+            JmesPathLexer.T__8,  // '['
+            JmesPathLexer.T__10, // ']'
+            JmesPathLexer.T__14  // '[?'
+                -> BRACKETS
+            JmesPathLexer.T__11, // '{'
+            JmesPathLexer.T__12  // '}'
+                -> BRACES
+            JmesPathLexer.T__9   // ','
+                -> COMMA
+            JmesPathLexer.T__13  // ':'
+                -> COLON
+            JmesPathLexer.T__17  // '`'
+                -> LITERAL_TICK
+            JmesPathLexer.WS -> WHITE_SPACE
+            else -> BAD_CHARACTER
+        }
+    }
 }

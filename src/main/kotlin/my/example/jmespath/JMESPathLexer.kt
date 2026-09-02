@@ -1,26 +1,37 @@
 package my.example.jmespath
 
 import com.intellij.lexer.LexerBase
+import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
+import org.antlr.v4.runtime.CharStreams
+import org.antlr.v4.runtime.Token
 
 class JMESPathLexer : LexerBase() {
     private var buffer: CharSequence = ""
     private var startOffset: Int = 0
     private var endOffset: Int = 0
+
     private var currentPosition: Int = 0
     private var tokenStart: Int = 0
     private var tokenEnd: Int = 0
     private var currentTokenType: IElementType? = null
 
-    companion object {
-        private val KEYWORDS = setOf("true", "false", "null")
-    }
+    private var antlrLexer: JmesPathLexer? = null
+    private var pendingToken: Token? = null
 
     override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
         this.buffer = buffer
         this.startOffset = startOffset
         this.endOffset = endOffset
         this.currentPosition = startOffset
+
+        val textToLex = if (startOffset < endOffset) buffer.subSequence(startOffset, endOffset).toString() else ""
+        val charStream = CharStreams.fromString(textToLex)
+        val lexer = JmesPathLexer(charStream)
+        lexer.removeErrorListeners()
+        this.antlrLexer = lexer
+        this.pendingToken = if (startOffset < endOffset) lexer.nextToken() else null
+
         advance()
     }
 
@@ -35,40 +46,48 @@ class JMESPathLexer : LexerBase() {
     override fun advance() {
         if (currentPosition >= endOffset) {
             currentTokenType = null
-            tokenStart = currentPosition
-            tokenEnd = currentPosition
+            tokenStart = endOffset
+            tokenEnd = endOffset
             return
         }
 
-        tokenStart = currentPosition
-        val c = buffer[currentPosition]
-
-        when {
-            Character.isWhitespace(c) -> {
-                while (currentPosition < endOffset && Character.isWhitespace(buffer[currentPosition])) {
-                    currentPosition++
-                }
-                tokenEnd = currentPosition
-                currentTokenType = JMESPathTokenTypes.WHITE_SPACE
+        val token = pendingToken
+        if (token == null || token.type == Token.EOF) {
+            val gapStart = currentPosition
+            val isWs = Character.isWhitespace(buffer[gapStart])
+            var gapEnd = gapStart + 1
+            while (gapEnd < endOffset && Character.isWhitespace(buffer[gapEnd]) == isWs) {
+                gapEnd++
             }
-            c == '_' || Character.isLetter(c) -> {
-                while (currentPosition < endOffset && (buffer[currentPosition] == '_' || Character.isLetterOrDigit(buffer[currentPosition]))) {
-                    currentPosition++
-                }
-                tokenEnd = currentPosition
-                val text = buffer.subSequence(tokenStart, tokenEnd).toString()
-                currentTokenType = if (KEYWORDS.contains(text)) {
-                    JMESPathTokenTypes.KEYWORD
-                } else {
-                    JMESPathTokenTypes.IDENTIFIER
-                }
-            }
-            else -> {
-                currentPosition++
-                tokenEnd = currentPosition
-                currentTokenType = JMESPathTokenTypes.BAD_CHARACTER
-            }
+            tokenStart = gapStart
+            tokenEnd = gapEnd
+            currentPosition = gapEnd
+            currentTokenType = if (isWs) JMESPathTokenTypes.WHITE_SPACE else TokenType.BAD_CHARACTER
+            return
         }
+
+        val tokenStartInDoc = startOffset + token.startIndex
+        val tokenEndInDoc = (startOffset + token.stopIndex + 1).coerceAtMost(endOffset)
+
+        if (currentPosition < tokenStartInDoc) {
+            val gapStart = currentPosition
+            val isWs = Character.isWhitespace(buffer[gapStart])
+            var gapEnd = gapStart + 1
+            while (gapEnd < tokenStartInDoc && Character.isWhitespace(buffer[gapEnd]) == isWs) {
+                gapEnd++
+            }
+            tokenStart = gapStart
+            tokenEnd = gapEnd
+            currentPosition = gapEnd
+            currentTokenType = if (isWs) JMESPathTokenTypes.WHITE_SPACE else TokenType.BAD_CHARACTER
+            return
+        }
+
+        tokenStart = tokenStartInDoc
+        tokenEnd = tokenEndInDoc
+        currentPosition = tokenEndInDoc
+        currentTokenType = JMESPathTokenTypes.getIElementType(token.type)
+        pendingToken = antlrLexer?.nextToken()
     }
 
     override fun getBufferSequence(): CharSequence = buffer

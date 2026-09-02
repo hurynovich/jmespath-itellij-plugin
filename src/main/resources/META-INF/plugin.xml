@@ -40,6 +40,10 @@
                 language="JMESPath"
                 implementationClass="my.example.jmespath.JMESPathSyntaxHighlighterFactory"/>
 
+        <lang.parserDefinition
+                language="JMESPath"
+                implementationClass="my.example.jmespath.JMESPathParserDefinition"/>
+
         <colorSettingsPage
                 implementation="my.example.jmespath.JMESPathColorSettingsPage"/>
     </extensions>
