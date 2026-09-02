@@ -8,6 +8,7 @@ object JMESPathElementTypes {
     @JvmField val EXPRESSION = JMESPathElementType("EXPRESSION")
     @JvmField val OBJECT_HASH = JMESPathElementType("OBJECT_HASH")
     @JvmField val KEYVAL_EXPR = JMESPathElementType("KEYVAL_EXPR")
+    @JvmField val KEY_NAME = JMESPathElementType("KEY_NAME")
     @JvmField val OBJECT_PAIR = KEYVAL_EXPR
     @JvmField val MULTI_SELECT_LIST = JMESPathElementType("MULTI_SELECT_LIST")
     @JvmField val FILTER_EXPRESSION = JMESPathElementType("FILTER_EXPRESSION")

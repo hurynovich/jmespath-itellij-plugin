@@ -36,7 +36,9 @@ multiSelectList : '[' expression (',' expression)* ']' ;
 
 multiSelectHash : '{' keyvalExpr (',' keyvalExpr)* '}' ;
 
-keyvalExpr : identifier ':' expression ;
+keyName : identifier ;
+
+keyvalExpr : keyName ':' expression ;
 
 bracketSpecifier
   : '[' SIGNED_INT ']' # bracketIndex

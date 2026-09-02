@@ -29,6 +29,10 @@ class JMESPathParserTest : BasePlatformTestCase() {
             .filter { it.node.elementType == JMESPathElementTypes.KEYVAL_EXPR }
         assertEquals(2, keyvalPairs.size)
 
+        val keyNames = PsiTreeUtil.findChildrenOfType(psiFile, JMESPathPsiElement::class.java)
+            .filter { it.node.elementType == JMESPathElementTypes.KEY_NAME }
+        assertEquals(2, keyNames.size)
+
         val multiLists = PsiTreeUtil.findChildrenOfType(psiFile, JMESPathPsiElement::class.java)
             .filter { it.node.elementType == JMESPathElementTypes.MULTI_SELECT_LIST }
         assertEquals(1, multiLists.size)

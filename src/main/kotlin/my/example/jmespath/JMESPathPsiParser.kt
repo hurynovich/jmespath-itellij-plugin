@@ -151,7 +151,9 @@ class JMESPathPsiParser : PsiParser {
                     builder.tokenType == JMESPathTokenTypes.STRING ||
                     builder.tokenType == JMESPathTokenTypes.KEYWORD
                 ) {
+                    val keyNameMarker = builder.mark()
                     builder.advanceLexer()
+                    keyNameMarker.done(JMESPathElementTypes.KEY_NAME)
                 }
                 if (builder.tokenType == JMESPathTokenTypes.COLON) {
                     builder.advanceLexer()
