@@ -13,6 +13,10 @@ class JMESPathSyntaxHighlighter : SyntaxHighlighterBase() {
             "JMESPATH_KEYWORD",
             DefaultLanguageHighlighterColors.KEYWORD
         )
+        val CURRENT_NODE: TextAttributesKey = TextAttributesKey.createTextAttributesKey(
+            "JMESPATH_CURRENT_NODE",
+            DefaultLanguageHighlighterColors.KEYWORD
+        )
         val IDENTIFIER: TextAttributesKey = TextAttributesKey.createTextAttributesKey(
             "JMESPATH_IDENTIFIER",
             DefaultLanguageHighlighterColors.IDENTIFIER
@@ -59,6 +63,7 @@ class JMESPathSyntaxHighlighter : SyntaxHighlighterBase() {
         )
 
         private val KEYWORD_KEYS = arrayOf(KEYWORD)
+        private val CURRENT_NODE_KEYS = arrayOf(CURRENT_NODE)
         private val IDENTIFIER_KEYS = arrayOf(IDENTIFIER)
         private val STRING_KEYS = arrayOf(STRING)
         private val NUMBER_KEYS = arrayOf(NUMBER)
@@ -78,6 +83,7 @@ class JMESPathSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
             JMESPathTokenTypes.KEYWORD -> KEYWORD_KEYS
+            JMESPathTokenTypes.CURRENT_NODE -> CURRENT_NODE_KEYS
             JMESPathTokenTypes.IDENTIFIER -> IDENTIFIER_KEYS
             JMESPathTokenTypes.STRING -> STRING_KEYS
             JMESPathTokenTypes.NUMBER -> NUMBER_KEYS

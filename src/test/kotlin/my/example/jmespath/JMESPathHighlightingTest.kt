@@ -125,7 +125,7 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
         lexer.advance()
 
-        assertEquals(JMESPathTokenTypes.OPERATOR, lexer.tokenType)
+        assertEquals(JMESPathTokenTypes.CURRENT_NODE, lexer.tokenType)
         assertEquals("@", lexer.tokenText)
         lexer.advance()
 
@@ -178,6 +178,11 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals(1, keywordHighlights.size)
         assertEquals(JMESPathSyntaxHighlighter.KEYWORD, keywordHighlights[0])
         assertEquals(DefaultLanguageHighlighterColors.KEYWORD, JMESPathSyntaxHighlighter.KEYWORD.fallbackAttributeKey)
+
+        val currentNodeHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.CURRENT_NODE)
+        assertEquals(1, currentNodeHighlights.size)
+        assertEquals(JMESPathSyntaxHighlighter.CURRENT_NODE, currentNodeHighlights[0])
+        assertEquals(DefaultLanguageHighlighterColors.KEYWORD, JMESPathSyntaxHighlighter.CURRENT_NODE.fallbackAttributeKey)
 
         val badCharHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.BAD_CHARACTER)
         assertEquals(1, badCharHighlights.size)

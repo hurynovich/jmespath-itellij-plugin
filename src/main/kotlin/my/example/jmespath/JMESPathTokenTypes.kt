@@ -8,6 +8,9 @@ object JMESPathTokenTypes {
     val KEYWORD = JMESPathTokenType("JMESPATH_KEYWORD")
 
     @JvmField
+    val CURRENT_NODE = JMESPathTokenType("JMESPATH_CURRENT_NODE")
+
+    @JvmField
     val IDENTIFIER = JMESPathTokenType("JMESPATH_IDENTIFIER")
 
     @JvmField
@@ -53,13 +56,13 @@ object JMESPathTokenTypes {
             JmesPathLexer.STRING, JmesPathLexer.RAW_STRING -> STRING
             JmesPathLexer.REAL_OR_EXPONENT_NUMBER, JmesPathLexer.SIGNED_INT -> NUMBER
             JmesPathLexer.COMPARATOR -> COMPARATOR
+            JmesPathLexer.T__15 -> CURRENT_NODE // '@'
             JmesPathLexer.T__0,  // '.'
             JmesPathLexer.T__1,  // '!'
             JmesPathLexer.T__2,  // '&&'
             JmesPathLexer.T__3,  // '||'
             JmesPathLexer.T__6,  // '|'
             JmesPathLexer.T__7,  // '*'
-            JmesPathLexer.T__15, // '@'
             JmesPathLexer.T__16  // '&'
                 -> OPERATOR
             JmesPathLexer.T__4,  // '('

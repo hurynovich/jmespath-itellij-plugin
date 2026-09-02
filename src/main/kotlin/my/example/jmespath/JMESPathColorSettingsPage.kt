@@ -15,6 +15,10 @@ class JMESPathColorSettingsPage : ColorSettingsPage {
             JMESPathSyntaxHighlighter.KEYWORD
         ),
         AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.current_node"),
+            JMESPathSyntaxHighlighter.CURRENT_NODE
+        ),
+        AttributesDescriptor(
             MyMessageBundle.message("jmespath.colors.identifier"),
             JMESPathSyntaxHighlighter.IDENTIFIER
         ),
