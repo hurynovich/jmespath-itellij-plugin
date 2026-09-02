@@ -13,6 +13,8 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
 
         assertEquals(JMESPathFileType.INSTANCE, jmespathType)
         assertEquals(JMESPathFileType.INSTANCE, jpType)
+        assertEquals(JMESPathIcons.FILE, jmespathType.icon)
+        assertEquals(JMESPathIcons.FILE, jpType.icon)
     }
 
     fun testFunctionTokens() {
