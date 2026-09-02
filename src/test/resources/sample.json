@@ -1,0 +1,301 @@
+{
+  "people": [
+    {
+      "name": "Alice Johnson",
+      "display-name": "Alice J.",
+      "displayName": "Alice",
+      "age": 34,
+      "active": true,
+      "deleted": false,
+      "role": "engineer",
+      "banned": false,
+      "suspended": false,
+      "email": "alice@example.com",
+      "tags": ["backend", "kotlin", "search", "jmespath"],
+      "scores": [12, 25, 40, 55, 70, 85, 91, 96, 99, 100, 101],
+      "projects": [
+        {
+          "id": "p-100",
+          "name": "Atlas",
+          "status": "active",
+          "tags": ["core", "api"],
+          "owner": {
+            "name": "Team Alpha"
+          },
+          "metrics": {
+            "score": 91.5,
+            "rank": 2
+          }
+        },
+        {
+          "id": "p-101",
+          "name": "Borealis",
+          "status": "inactive",
+          "tags": ["legacy"],
+          "owner": {
+            "name": "Team Beta"
+          },
+          "metrics": {
+            "score": 88.0,
+            "rank": 8
+          }
+        },
+        {
+          "id": "p-102",
+          "name": "Cygnus",
+          "status": "active",
+          "tags": ["experimental", "ml"],
+          "owner": {
+            "name": "Team Gamma"
+          },
+          "metrics": {
+            "score": 76.25,
+            "rank": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bob Smith",
+      "display-name": "Bobby",
+      "displayName": null,
+      "age": 17,
+      "active": true,
+      "deleted": false,
+      "role": "intern",
+      "banned": false,
+      "suspended": false,
+      "email": "bob@example.com",
+      "tags": ["frontend", "typescript"],
+      "scores": [3, 6, 9, 12, 15, 18],
+      "projects": [
+        {
+          "id": "p-200",
+          "name": "Delta",
+          "status": "active",
+          "tags": ["ui"],
+          "owner": {
+            "name": "Team Delta"
+          },
+          "metrics": {
+            "score": 82.0,
+            "rank": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "Carla Admin",
+      "display-name": "Carla Root",
+      "displayName": "Carla",
+      "age": 72,
+      "active": false,
+      "deleted": false,
+      "role": "admin",
+      "banned": false,
+      "suspended": false,
+      "email": "carla@example.com",
+      "tags": ["admin", "security", "ops"],
+      "scores": [100, 98, 95, 93, 90],
+      "projects": [
+        {
+          "id": "p-300",
+          "name": "Eclipse",
+          "status": "active",
+          "tags": ["security", "audit"],
+          "owner": {
+            "name": "Team Security"
+          },
+          "metrics": {
+            "score": 99.9,
+            "rank": 1
+          }
+        },
+        {
+          "id": "p-301",
+          "name": "Falcon",
+          "status": "active",
+          "tags": ["ops"],
+          "owner": {
+            "name": "Team Ops"
+          },
+          "metrics": {
+            "score": 79.5,
+            "rank": 7
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dana Deleted",
+      "display-name": "Dana D.",
+      "displayName": "Dana",
+      "age": 29,
+      "active": true,
+      "deleted": true,
+      "role": "engineer",
+      "banned": false,
+      "suspended": false,
+      "email": "dana@example.com",
+      "tags": ["backend"],
+      "scores": [1, 2, 3, 4],
+      "projects": [
+        {
+          "id": "p-400",
+          "name": "Ghost",
+          "status": "active",
+          "tags": ["hidden"],
+          "owner": {
+            "name": "Team Ghost"
+          },
+          "metrics": {
+            "score": 95.0,
+            "rank": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "Evan NoEmail",
+      "display-name": "Evan N.",
+      "displayName": "",
+      "age": 45,
+      "active": true,
+      "deleted": false,
+      "role": "manager",
+      "banned": false,
+      "suspended": true,
+      "email": null,
+      "tags": ["management", "planning"],
+      "scores": [10, 20, 30, 40, 50],
+      "projects": [
+        {
+          "id": "p-500",
+          "name": "Helios",
+          "status": "active",
+          "tags": ["planning"],
+          "owner": {
+            "name": "Team Strategy"
+          },
+          "metrics": {
+            "score": 84.2,
+            "rank": 5
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fiona Banned Admin",
+      "display-name": "Fiona Admin",
+      "displayName": "Fiona",
+      "age": 52,
+      "active": false,
+      "deleted": false,
+      "role": "admin",
+      "banned": true,
+      "suspended": false,
+      "email": "fiona@example.com",
+      "tags": ["admin", "finance"],
+      "scores": [44, 55, 66],
+      "projects": [
+        {
+          "id": "p-600",
+          "name": "Icarus",
+          "status": "active",
+          "tags": ["finance"],
+          "owner": {
+            "name": "Team Finance"
+          },
+          "metrics": {
+            "score": 90.0,
+            "rank": 6
+          }
+        }
+      ]
+    },
+    {
+      "name": "George LowScore",
+      "display-name": "George L.",
+      "displayName": "George",
+      "age": 38,
+      "active": true,
+      "deleted": false,
+      "role": "engineer",
+      "banned": false,
+      "suspended": false,
+      "email": "george@example.com",
+      "tags": ["qa", "automation"],
+      "scores": [7, 14, 21, 28, 35],
+      "projects": [
+        {
+          "id": "p-700",
+          "name": "Juno",
+          "status": "active",
+          "tags": ["qa"],
+          "owner": {
+            "name": "Team Quality"
+          },
+          "metrics": {
+            "score": 74.9,
+            "rank": 9
+          }
+        },
+        {
+          "id": "p-701",
+          "name": "Kepler",
+          "status": "inactive",
+          "tags": ["automation"],
+          "owner": {
+            "name": "Team Automation"
+          },
+          "metrics": {
+            "score": 97.0,
+            "rank": 2
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hannah Edge",
+      "display-name": "Hannah E.",
+      "displayName": "Hannah",
+      "age": 65,
+      "active": true,
+      "deleted": false,
+      "role": "architect",
+      "banned": false,
+      "suspended": false,
+      "email": "hannah@example.com",
+      "tags": [],
+      "scores": [-10, 0, 10, 20, 30, 40, 50, 60],
+      "projects": [
+        {
+          "id": "p-800",
+          "name": "Luna",
+          "status": "active",
+          "tags": [],
+          "owner": {
+            "name": "Team Architecture"
+          },
+          "metrics": {
+            "score": 80.0,
+            "rank": 10
+          }
+        },
+        {
+          "id": "p-801",
+          "name": "Mirage",
+          "status": "active",
+          "tags": ["design"],
+          "owner": {
+            "name": "Team UX"
+          },
+          "metrics": {
+            "score": 75.5,
+            "rank": 11
+          }
+        }
+      ]
+    }
+  ]
+}

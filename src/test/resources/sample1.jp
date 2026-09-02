@@ -1,0 +1,50 @@
+(
+  people[?
+    (
+      age >= `18` &&
+      age <= `65` &&
+      active == `true` &&
+      deleted != `true`
+    ) ||
+    (
+      role == 'admin' &&
+      !banned
+    )
+  ][]
+  .{
+    name: name,
+    quotedKey: "display-name",
+    current: @,
+    firstTag: tags[0],
+    lastScore: scores[-1],
+    middleScores: scores[1:10:2],
+    allTags: tags[*],
+    flattenedProjects: projects[],
+    projectNames: projects[*].name,
+    filteredProjects: projects[?
+      status == 'active' &&
+      metrics.score > `75.5` &&
+      metrics.rank <= `10`
+    ].{
+      id: id,
+      name: name,
+      tags: tags[*],
+      owner: owner.name,
+      literalObject: `{"kind":"project","enabled":true,"limits":[1,2,3],"meta":{"x":null}}`
+    },
+    computed: {
+      hasEmail: email != null,
+      notSuspended: !suspended,
+      rawString: 'raw string with spaces and \' escaped quote',
+      literalArray: `[true, false, null, 123, -45, 6.78, {"a":"b"}]`
+    },
+    sortedNames: sort_by(projects, &name)[*].name,
+    maxScoreProject: max_by(projects, &metrics.score).name,
+    joinedTags: join(', ', tags),
+    fallbackName: displayName || name || 'unknown'
+  }
+  | [?computed.hasEmail && filteredProjects[0].metrics.score >= `80`]
+  | sort_by(@, &name)
+  | reverse(@)
+  | [0:20]
+)
