@@ -48,6 +48,10 @@
                 language="JMESPath"
                 implementationClass="my.example.jmespath.JMESPathPairedBraceMatcher"/>
 
+        <annotator
+                language="JMESPath"
+                implementationClass="my.example.jmespath.JMESPathSyntaxAnnotator"/>
+
         <colorSettingsPage
                 implementation="my.example.jmespath.JMESPathColorSettingsPage"/>
 

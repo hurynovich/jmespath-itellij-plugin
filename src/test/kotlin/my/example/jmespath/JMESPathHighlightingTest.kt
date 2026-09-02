@@ -1,8 +1,11 @@
 package my.example.jmespath
 
 import com.intellij.lang.LanguageBraceMatching
+import com.intellij.lang.LanguageExtensionPoint
+import com.intellij.lang.annotation.Annotator
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.HighlighterColors
+import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -281,8 +284,9 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals(HighlighterColors.BAD_CHARACTER, JMESPathSyntaxHighlighter.BAD_CHARACTER.fallbackAttributeKey)
 
         val identifierHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.IDENTIFIER)
-        assertEquals(1, identifierHighlights.size)
-        assertEquals(JMESPathSyntaxHighlighter.IDENTIFIER, identifierHighlights[0])
+        assertEquals(0, identifierHighlights.size)
+
+        assertEquals(DefaultLanguageHighlighterColors.INSTANCE_FIELD, JMESPathSyntaxHighlighter.KEY_NAME.fallbackAttributeKey)
 
         val stringHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.STRING)
         assertEquals(1, stringHighlights.size)
@@ -408,12 +412,18 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertTrue(matcher is JMESPathPairedBraceMatcher)
     }
 
+    fun testSyntaxAnnotatorRegisteredInLanguage() {
+        val points = ExtensionPointName.create<LanguageExtensionPoint<Annotator>>("com.intellij.annotator").extensionList
+        assertTrue(points.any { it.language == JMESPathLanguage.INSTANCE.id && it.instance is JMESPathSyntaxAnnotator })
+    }
+
     fun testColorSettingsPage() {
         val page = JMESPathColorSettingsPage()
         assertNotNull(page.displayName)
         assertNotNull(page.icon)
         assertTrue(page.attributeDescriptors.isNotEmpty())
         assertTrue(page.attributeDescriptors.any { it.key == JMESPathSyntaxHighlighter.FUNCTION })
+        assertTrue(page.attributeDescriptors.any { it.key == JMESPathSyntaxHighlighter.KEY_NAME })
         assertTrue(page.demoText.contains("true"))
         assertTrue(page.demoText.contains("false"))
         assertTrue(page.demoText.contains("null"))

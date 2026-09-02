@@ -23,8 +23,8 @@ class JMESPathColorSettingsPage : ColorSettingsPage {
             JMESPathSyntaxHighlighter.FUNCTION
         ),
         AttributesDescriptor(
-            MyMessageBundle.message("jmespath.colors.identifier"),
-            JMESPathSyntaxHighlighter.IDENTIFIER
+            MyMessageBundle.message("jmespath.colors.key_name"),
+            JMESPathSyntaxHighlighter.KEY_NAME
         ),
         AttributesDescriptor(
             MyMessageBundle.message("jmespath.colors.string"),

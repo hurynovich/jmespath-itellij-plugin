@@ -21,9 +21,9 @@ class JMESPathSyntaxHighlighter : SyntaxHighlighterBase() {
             "JMESPATH_FUNCTION",
             DefaultLanguageHighlighterColors.FUNCTION_CALL
         )
-        val IDENTIFIER: TextAttributesKey = TextAttributesKey.createTextAttributesKey(
-            "JMESPATH_IDENTIFIER",
-            DefaultLanguageHighlighterColors.IDENTIFIER
+        val KEY_NAME: TextAttributesKey = TextAttributesKey.createTextAttributesKey(
+            "JMESPATH_KEY_NAME",
+            DefaultLanguageHighlighterColors.INSTANCE_FIELD
         )
         val STRING: TextAttributesKey = TextAttributesKey.createTextAttributesKey(
             "JMESPATH_STRING",
@@ -69,7 +69,6 @@ class JMESPathSyntaxHighlighter : SyntaxHighlighterBase() {
         private val KEYWORD_KEYS = arrayOf(KEYWORD)
         private val CURRENT_NODE_KEYS = arrayOf(CURRENT_NODE)
         private val FUNCTION_KEYS = arrayOf(FUNCTION)
-        private val IDENTIFIER_KEYS = arrayOf(IDENTIFIER)
         private val STRING_KEYS = arrayOf(STRING)
         private val NUMBER_KEYS = arrayOf(NUMBER)
         private val OPERATOR_KEYS = arrayOf(OPERATOR)
@@ -90,7 +89,7 @@ class JMESPathSyntaxHighlighter : SyntaxHighlighterBase() {
             JMESPathTokenTypes.KEYWORD -> KEYWORD_KEYS
             JMESPathTokenTypes.CURRENT_NODE -> CURRENT_NODE_KEYS
             JMESPathTokenTypes.FUNCTION -> FUNCTION_KEYS
-            JMESPathTokenTypes.IDENTIFIER -> IDENTIFIER_KEYS
+            JMESPathTokenTypes.IDENTIFIER -> EMPTY_KEYS
             JMESPathTokenTypes.STRING -> STRING_KEYS
             JMESPathTokenTypes.NUMBER -> NUMBER_KEYS
             JMESPathTokenTypes.OPERATOR -> OPERATOR_KEYS
