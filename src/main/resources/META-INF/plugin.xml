@@ -28,6 +28,20 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="MyToolWindow" factoryClass="my.example.MyToolWindowFactory"
                     icon="AllIcons.Toolwindows.ToolWindowPalette"/>
+
+        <fileType
+                name="JMESPath"
+                implementationClass="my.example.jmespath.JMESPathFileType"
+                fieldName="INSTANCE"
+                language="JMESPath"
+                extensions="jmespath;jp"/>
+
+        <lang.syntaxHighlighterFactory
+                language="JMESPath"
+                implementationClass="my.example.jmespath.JMESPathSyntaxHighlighterFactory"/>
+
+        <colorSettingsPage
+                implementation="my.example.jmespath.JMESPathColorSettingsPage"/>
     </extensions>
 
 </idea-plugin>
