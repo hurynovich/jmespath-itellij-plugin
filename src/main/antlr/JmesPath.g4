@@ -23,7 +23,9 @@ expression
   ;
 
 chainedExpression
-  : identifier
+  :
+  identifier
+  | globalNode
   | multiSelectList
   | multiSelectHash
   | functionExpression
@@ -70,6 +72,8 @@ functionArg
   ;
 
 currentNode : '@' ;
+
+globalNode : '$' identifier ;
 
 expressionType : '&' expression ;
 

@@ -255,6 +255,19 @@ class JMESPathPsiParser : PsiParser {
             return marker
         }
 
+        if (tokenType == JMESPathTokenTypes.GLOBAL_NODE_PREFIX) {
+            val marker = builder.mark()
+            builder.advanceLexer()
+            if (builder.tokenType == JMESPathTokenTypes.IDENTIFIER ||
+                builder.tokenType == JMESPathTokenTypes.STRING ||
+                builder.tokenType == JMESPathTokenTypes.KEYWORD
+            ) {
+                builder.advanceLexer()
+            }
+            marker.done(JMESPathElementTypes.GLOBAL_NODE)
+            return marker
+        }
+
         if (tokenType == JMESPathTokenTypes.FUNCTION ||
             (tokenType == JMESPathTokenTypes.IDENTIFIER && builder.lookAhead(1) == JMESPathTokenTypes.LPAREN)
         ) {

@@ -6,7 +6,9 @@ import com.intellij.lang.annotation.Annotator
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.extensions.ExtensionPointName
+import com.intellij.lang.ASTNode
 import com.intellij.openapi.fileTypes.FileTypeManager
+import com.intellij.psi.tree.IElementType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class JMESPathHighlightingTest : BasePlatformTestCase() {
@@ -260,6 +262,40 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertNull(lexer.tokenType)
     }
 
+    fun testGlobalNodePrefixTokens() {
+        val lexer = JMESPathLexer()
+        lexer.start("${'$'}root foo.${'$'}bar")
+
+        assertEquals(JMESPathTokenTypes.GLOBAL_NODE_PREFIX, lexer.tokenType)
+        assertEquals("$", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, lexer.tokenType)
+        assertEquals("root", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.WHITE_SPACE, lexer.tokenType)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, lexer.tokenType)
+        assertEquals("foo", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.OPERATOR, lexer.tokenType)
+        assertEquals(".", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.GLOBAL_NODE_PREFIX, lexer.tokenType)
+        assertEquals("$", lexer.tokenText)
+        lexer.advance()
+
+        assertEquals(JMESPathTokenTypes.IDENTIFIER, lexer.tokenType)
+        assertEquals("bar", lexer.tokenText)
+        lexer.advance()
+
+        assertNull(lexer.tokenType)
+    }
+
     fun testSyntaxHighlighterAttributes() {
         val highlighter = JMESPathSyntaxHighlighter()
 
@@ -287,6 +323,7 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertEquals(0, identifierHighlights.size)
 
         assertEquals(DefaultLanguageHighlighterColors.INSTANCE_FIELD, JMESPathSyntaxHighlighter.KEY_NAME.fallbackAttributeKey)
+        assertEquals(DefaultLanguageHighlighterColors.STATIC_FIELD, JMESPathSyntaxHighlighter.GLOBAL_NODE.fallbackAttributeKey)
 
         val stringHighlights = highlighter.getTokenHighlights(JMESPathTokenTypes.STRING)
         assertEquals(1, stringHighlights.size)
@@ -424,15 +461,34 @@ class JMESPathHighlightingTest : BasePlatformTestCase() {
         assertTrue(page.attributeDescriptors.isNotEmpty())
         assertTrue(page.attributeDescriptors.any { it.key == JMESPathSyntaxHighlighter.FUNCTION })
         assertTrue(page.attributeDescriptors.any { it.key == JMESPathSyntaxHighlighter.KEY_NAME })
+        assertTrue(page.attributeDescriptors.any { it.key == JMESPathSyntaxHighlighter.GLOBAL_NODE })
         assertTrue(page.demoText.contains("true"))
         assertTrue(page.demoText.contains("false"))
         assertTrue(page.demoText.contains("null"))
+        assertTrue(page.demoText.contains("<GLOBAL_NODE>"))
+        assertEquals(JMESPathSyntaxHighlighter.GLOBAL_NODE, page.additionalHighlightingTagToDescriptorMap?.get("GLOBAL_NODE"))
     }
 
     fun testPsiFileParsing() {
         val psiFile = myFixture.configureByText("example.jp", "locations[?state == 'WA'].name | sort(@)")
         assertTrue(psiFile is JMESPathFile)
         assertEquals(JMESPathFileType.INSTANCE, psiFile.fileType)
+    }
+
+    fun testGlobalNodePsiElement() {
+        val psiFile = myFixture.configureByText("example.jp", "foo.${'$'}bar")
+        val globalNodes = mutableListOf<ASTNode>()
+        fun collect(node: ASTNode) {
+            if (node.elementType == JMESPathElementTypes.GLOBAL_NODE) {
+                globalNodes.add(node)
+            }
+            for (child in node.getChildren(null)) {
+                collect(child)
+            }
+        }
+        collect(psiFile.node)
+        assertEquals(1, globalNodes.size)
+        assertEquals("${'$'}bar", globalNodes[0].text)
     }
 
     fun testSampleFileTokens() {

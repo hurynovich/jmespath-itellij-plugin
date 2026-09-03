@@ -13,5 +13,12 @@ class JMESPathSyntaxAnnotator : Annotator {
                 .textAttributes(JMESPathSyntaxHighlighter.KEY_NAME)
                 .create()
         }
+
+        if (element.node.elementType == JMESPathElementTypes.GLOBAL_NODE) {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(element.textRange)
+                .textAttributes(JMESPathSyntaxHighlighter.GLOBAL_NODE)
+                .create()
+        }
     }
 }

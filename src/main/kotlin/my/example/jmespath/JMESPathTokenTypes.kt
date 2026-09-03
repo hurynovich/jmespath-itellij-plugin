@@ -11,6 +11,9 @@ object JMESPathTokenTypes {
     val CURRENT_NODE = JMESPathTokenType("JMESPATH_CURRENT_NODE")
 
     @JvmField
+    val GLOBAL_NODE_PREFIX = JMESPathTokenType("JMESPATH_GLOBAL_NODE_PREFIX")
+
+    @JvmField
     val FUNCTION = JMESPathTokenType("JMESPATH_FUNCTION")
 
     @JvmField
@@ -98,13 +101,14 @@ object JMESPathTokenTypes {
             JmesPathLexer.REAL_OR_EXPONENT_NUMBER, JmesPathLexer.SIGNED_INT -> NUMBER
             JmesPathLexer.COMPARATOR -> COMPARATOR
             JmesPathLexer.T__15 -> CURRENT_NODE // '@'
+            JmesPathLexer.T__16 -> GLOBAL_NODE_PREFIX // '$'
             JmesPathLexer.T__0,  // '.'
             JmesPathLexer.T__1,  // '!'
             JmesPathLexer.T__2,  // '&&'
             JmesPathLexer.T__3,  // '||'
             JmesPathLexer.T__6,  // '|'
             JmesPathLexer.T__7,  // '*'
-            JmesPathLexer.T__16  // '&'
+            JmesPathLexer.T__17  // '&'
                 -> OPERATOR
             JmesPathLexer.T__4   // '('
                 -> LPAREN
@@ -123,7 +127,7 @@ object JMESPathTokenTypes {
                 -> COMMA
             JmesPathLexer.T__13  // ':'
                 -> COLON
-            JmesPathLexer.T__17  // '`'
+            JmesPathLexer.T__18  // '`'
                 -> LITERAL_TICK
             JmesPathLexer.WS -> WHITE_SPACE
             else -> BAD_CHARACTER

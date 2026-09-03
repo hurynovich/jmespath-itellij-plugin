@@ -25,6 +25,10 @@ class JMESPathSyntaxHighlighter : SyntaxHighlighterBase() {
             "JMESPATH_KEY_NAME",
             DefaultLanguageHighlighterColors.INSTANCE_FIELD
         )
+        val GLOBAL_NODE: TextAttributesKey = TextAttributesKey.createTextAttributesKey(
+            "JMESPATH_GLOBAL_NODE",
+            DefaultLanguageHighlighterColors.STATIC_FIELD
+        )
         val STRING: TextAttributesKey = TextAttributesKey.createTextAttributesKey(
             "JMESPATH_STRING",
             DefaultLanguageHighlighterColors.STRING

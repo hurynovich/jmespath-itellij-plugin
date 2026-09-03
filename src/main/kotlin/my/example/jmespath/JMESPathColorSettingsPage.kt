@@ -27,6 +27,10 @@ class JMESPathColorSettingsPage : ColorSettingsPage {
             JMESPathSyntaxHighlighter.KEY_NAME
         ),
         AttributesDescriptor(
+            MyMessageBundle.message("jmespath.colors.global_node"),
+            JMESPathSyntaxHighlighter.GLOBAL_NODE
+        ),
+        AttributesDescriptor(
             MyMessageBundle.message("jmespath.colors.string"),
             JMESPathSyntaxHighlighter.STRING
         ),
@@ -80,11 +84,12 @@ class JMESPathColorSettingsPage : ColorSettingsPage {
                 "disabled": false,
                 "emptyValue": null,
                 "count": 42
-            }
+            } | <GLOBAL_NODE>${'$'}root</GLOBAL_NODE>
         """.trimIndent()
     }
 
-    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey>? = null
+    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey>? =
+        mapOf("GLOBAL_NODE" to JMESPathSyntaxHighlighter.GLOBAL_NODE)
 
     override fun getAttributeDescriptors(): Array<AttributesDescriptor> = descriptors
 
